@@ -1,0 +1,82 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  // output   = "../generated/prisma" // ei line ta  dewa take tahle 
+  /* 
+    তাহলে onno file gulote import করতে হবে:
+import { PrismaClient } from "../../../generated/prisma";
+
+আর default থাকলে: ortat (output   = "../generated/prisma" ) ei line ta na dile tokon niser niome import hobe korte hobe onno file e : 
+import { PrismaClient } from "@prisma/client"; */
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ---------userModel
+model UserModel {
+  /**
+   * /*
+   * -------------------------
+   * eta muloto (prisma Schema DSL (Domain Specific Language) এর একটা model ডেফিনিশন।), jeta postgres er jonno make kora hocce
+   * UserModel name user table tar name hoye jabe, mongoDB hole UserModel name collection create hobe db te, ar
+   * তুমি এটাকে Model বলতে পারো, যেটা ডাটাবেজে গিয়ে Table (SQL) বা Collection (MongoDB) তে map হয়।
+   * 👉 মানে:
+   * যদি SQL (Postgres, MySQL, SQLite ইত্যাদি) ব্যবহার করো → UserModel ডাটাবেজে table হয়ে যাবে।
+   * যদি MongoDB ব্যবহার করো → UserModel ডাটাবেজে collection হয়ে যাবে।
+   * ✅ সংক্ষেপে:
+   * Prisma schema ফাইলে model মানে Model definition → SQL হলে table, Mongo হলে collection হবে।
+   * Prisma Client ব্যবহার করার সময় auto-generate হওয়া property camelCase হয় → তাই prisma.userModel.
+   * Mongoose/MongoDB তে convention হলো model নাম capital দিয়ে শুরু (PascalCase) রাখা।
+   * -------------------------
+   */
+  id         Int         @id @default(autoincrement())
+  name       String
+  // email      String
+  email      String      @unique
+  password   String?
+  role       Role        @default(USER)
+  phone      String
+  picture    String?
+  status     UserStatus  @default(INACTIVE)
+  isVerified Boolean     @default(false)
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  posts      PostModel[]
+}
+
+// ----------postModel
+
+model PostModel {
+  id         Int       @id @default(autoincrement())
+  title      String
+  content    String
+  thumbnail  String?
+  isFeatured Boolean   @default(true)
+  tags       String[]  @default([])
+  view       Int       @default(0)
+  authorId   Int
+  author     UserModel @relation(fields: [authorId], references: [id])
+  //forignName  tableName    @relation(fields: [authorId], references: [id_jeiTableErIdErSateLinkKorteCacciSeiIdTa])
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+}
+
+enum Role {
+  SUPER_ADMIN
+  ADMIN
+  USER
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  BLOCK
+}
