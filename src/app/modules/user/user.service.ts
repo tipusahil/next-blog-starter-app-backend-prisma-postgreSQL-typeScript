@@ -3,7 +3,7 @@ import { Prisma, UserModel } from "../../../../generated/prisma"; // prisma/clie
 
 import { prisma } from "../../config/db.config";
 
-const userDataForResponse = {
+export const userDataForResponse = {
   id: true,
   name: true,
   email: true,
@@ -32,15 +32,30 @@ const userDataForResponse = {
 };
 
 // ----1. create user--
-const createUser = async (
-  payload: Prisma.UserModelCreateInput
-): Promise<UserModel> => {
-  console.log("create user func", "payload:", payload);
-  const result = await prisma.userModel.create({
-    data: payload,
-    select: userDataForResponse,
-  });
-  return result;
+const createUser = async (payload: Prisma.UserModelCreateInput ) => {
+  const { email } = payload;
+
+  const isUserEixst = await prisma.userModel.findUnique({ where: { email } });
+  // const isUserEixst = await prisma.userModel.findUnique({ where: { email } }); // age theke email duplicate thakle migrate korlew kaj korbena, tai findUnqiue diye kojte gele sei field ta unique hote hoi.
+
+  if (isUserEixst) {
+    throw new Error("user already exist!");
+  }
+   if (!isUserEixst) {
+    const createUser = await prisma.userModel.create({
+      data : payload,
+       select: userDataForResponse,
+    });
+console.log(createUser)
+    // const { password ,...rest} = createUser;// select use koreci vitore tai baire password destruct korar drkr nai, 
+    return {
+      // data : rest,
+      data : createUser,
+      message : "user created successfully",
+    };
+  }
+
+ 
 };
 
 // ----2. update user--

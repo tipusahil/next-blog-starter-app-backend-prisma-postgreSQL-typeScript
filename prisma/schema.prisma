@@ -6,7 +6,7 @@
 
 generator client {
   provider = "prisma-client-js"
-  // output   = "../generated/prisma" // ei line ta  dewa take tahle 
+  output   = "../generated/prisma" // ei line ta  dewa take tahle 
   /* 
     তাহলে onno file gulote import করতে হবে:
 import { PrismaClient } from "../../../generated/prisma";

@@ -34,15 +34,19 @@ const PostDataForResponse = {
   createdAt: true,
   updatedAt: true,
   authorId: true,
-  author: {
-    // select: userDataForResponse,
-    select: {
-      id: true,
-      name: true,
-      email: true,
-    },
-  },
+      author: {
+        select: {
+          // select use na kore include use korle , include er vitore evabe select use kora jai, but include er baire select use korle include use korar drkr hoina,karon select er modde include er kaj gulo kora jai,
+          id: true,
+          name: true,
+          email: true,
+          picture: true,
+          isVerified: true,
+        },
+      },
 };
+
+
 // -------------------
 
 // ----1. create Post--
@@ -59,6 +63,8 @@ const createPost = async (
           id: true,
           name: true,
           email: true,
+          picture: true,
+          isVerified: true,
         },
       },
     },
@@ -211,9 +217,9 @@ const getBlogStat = async () => {
     });
     // ------------
 
-    const daysArray = [3,5,7, 10, 15, 20, 30];
-const postsCountsByDays: Record<string, number> = {};
-// Record<string, number> eta mane holo (postsCountsByDays) ei object er key gulo string hbe, ar key er values gulo number hobe.
+    const daysArray = [3, 5, 7, 10, 15, 20, 30];
+    const postsCountsByDays: Record<string, number> = {};
+    // Record<string, number> eta mane holo (postsCountsByDays) ei object er key gulo string hbe, ar key er values gulo number hobe.
     for (const days of daysArray) {
       const XDate = new Date();
       XDate.setDate(XDate.getDate() - days);

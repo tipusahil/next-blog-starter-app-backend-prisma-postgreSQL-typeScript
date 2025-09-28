@@ -9,14 +9,14 @@ const createUser = async (req: Request, res: Response, next: NextFunction) => {
 
     res.status(201).json({
       success: true,
-      message: "user created successfully",
-      data: result,
+      message: result?.message || "user created successfully",
+      data: result?.data,
     });
-  } catch (error) {
+  } catch (error : any) {
     console.log(error);
     res.status(400).json({
       success: false,
-      message: "user creation failed!",
+      message: error?.message || "user creation failed!",
       error: error,
     });
     next();

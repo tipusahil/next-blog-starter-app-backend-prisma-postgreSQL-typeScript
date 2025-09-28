@@ -5,5 +5,5 @@ build
 .log
 .logger
 /generated/prisma
-
+debug.log
 /generated/prisma
