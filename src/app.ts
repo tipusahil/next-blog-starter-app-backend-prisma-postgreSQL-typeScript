@@ -1,4 +1,12 @@
 import compression from "compression";
+/* compression প্যাকেজ কী?
+লাইব্রেরি টাইপ: Express.js (অথবা Connect-based frameworks) এর জন্য Middleware।
+মূল কাজ: Response body gzip বা Brotli compress করে ক্লায়েন্টে পাঠানো।
+ফলাফল:
+Response এর size কমে যায়।
+Client এর কাছে ডাটা ট্রান্সফার দ্রুত হয়।
+Network bandwidth বাঁচে।
+Page load time improve করে। */
 import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
