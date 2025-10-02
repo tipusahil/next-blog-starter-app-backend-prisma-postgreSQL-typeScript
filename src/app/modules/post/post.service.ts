@@ -95,7 +95,7 @@ const getAllPosts = async (query: Record<string, string>) => {
   const search = (query.search as string) || "";
   const isFeatured = query.isFeatured ? query.isFeatured === "true" : undefined;
   const tags = query.tags ? (query.tags as string).split(",") : [];
-
+//   const tags = query.tags ? (query.tags as string).split(",").filter(tag => tag.trim() !== "") : [];
   // ✅ REST API convention (GitHub, Stripe ইত্যাদি সবাই ব্যবহার করে)
   // Example: ?sort=-createdAt  => createdAt desc
   const sort = query.sort || "-createdAt";
@@ -105,6 +105,7 @@ const getAllPosts = async (query: Record<string, string>) => {
   // ✅ GraphQL style convention (explicit params)
   // Example: ?sortBy=title&sortOrder=asc
   const sortBy = query.sortBy || undefined;
+  // const sortBy = query.sortBy ? String(query.sortBy) : undefined;
   const sortOrderGql = query.sortOrder === "asc" ? "asc" : "desc";
 
   const skip = (page - 1) * limit;
